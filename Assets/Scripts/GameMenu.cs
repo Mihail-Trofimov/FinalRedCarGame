@@ -60,6 +60,7 @@ public class GameMenu : MonoBehaviour
             {
                 Time.timeScale = 1f;
                 Cursor.visible = false;
+
                 _menu = false;
                 _panelStatus.SetActive(true);
                 _panelMenu.SetActive(false);
@@ -71,16 +72,6 @@ public class GameMenu : MonoBehaviour
 
     public void OnSettings()
     {
-        //StartCoroutine(IESettings());
-        _settings = true;
-        _panelSettings.SetActive(true);
-        _panelMenu.SetActive(false);
-        _panelStatus.SetActive(false);
-        _panelAbout.SetActive(false);
-    }
-    IEnumerator IESettings()
-    {
-        yield return new WaitForSeconds(0.15f);
         _settings = true;
         _panelSettings.SetActive(true);
         _panelMenu.SetActive(false);
@@ -89,16 +80,6 @@ public class GameMenu : MonoBehaviour
     }
     public void OnAbout()
     {
-        //StartCoroutine(IEAbout());
-        _about = true;
-        _panelAbout.SetActive(true);
-        _panelStatus.SetActive(false);
-        _panelSettings.SetActive(false);
-        _panelMenu.SetActive(false);
-    }
-    IEnumerator IEAbout()
-    {
-        yield return new WaitForSeconds(0.15f);
         _about = true;
         _panelAbout.SetActive(true);
         _panelStatus.SetActive(false);
@@ -107,17 +88,6 @@ public class GameMenu : MonoBehaviour
     }
     public void OnMenu()
     {
-        //StartCoroutine(IEMenu());
-        _about = false;
-        _settings = false;
-        _panelMenu.SetActive(true);
-        _panelAbout.SetActive(false);
-        _panelStatus.SetActive(false);
-        _panelSettings.SetActive(false);
-    }
-    IEnumerator IEMenu()
-    {
-        yield return new WaitForSeconds(0.15f);
         _about = false;
         _settings = false;
         _panelMenu.SetActive(true);
@@ -127,7 +97,6 @@ public class GameMenu : MonoBehaviour
     }
     public void OnGame()
     {
-        //StartCoroutine(IEGame());
         Time.timeScale = 1f;
         Cursor.visible = false;
         _about = false;
@@ -137,31 +106,9 @@ public class GameMenu : MonoBehaviour
         _panelAbout.SetActive(false);
         _panelSettings.SetActive(false);
         _panelMenu.SetActive(false);
-    }
-    IEnumerator IEGame()
-    {
-        yield return new WaitForSeconds(0.15f);
-        Time.timeScale = 1f;
-        Cursor.visible = false;
-        _about = false;
-        _settings = false;
-        _menu = false;
-        _panelStatus.SetActive(true);
-        _panelAbout.SetActive(false);
-        _panelSettings.SetActive(false);
-        _panelMenu.SetActive(false);
-
     }
     public void OnMainMenu()
     {
-        //StartCoroutine(IEMainMenu());
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(0);
-    }
-
-    IEnumerator IEMainMenu()
-    {
-        yield return new WaitForSeconds(0.15f);
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
     }

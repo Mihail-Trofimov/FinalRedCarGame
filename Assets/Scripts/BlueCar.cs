@@ -8,6 +8,9 @@ public class BlueCar : MonoBehaviour
 {
     [SerializeField] private GameObject _player;
     [SerializeField] private Transform _loopWPSObj;
+    [SerializeField] private AudioSource _crashAudio;
+
+    private PlayerMovements _playerScript;
     private Transform[] _loopWPS;
     private NavMeshAgent _enemy;
     private Rigidbody _rb;
@@ -15,10 +18,11 @@ public class BlueCar : MonoBehaviour
     private int currentWP;
     private Vector3 _target;
     private float _speed;
-    Animator animator;
+    private Animator animator;
 
     void Start()
     {
+        _playerScript = _player.GetComponent<PlayerMovements>();
         animator = GetComponent<Animator>();
         animator.SetBool("isAttack", false);
         animator.SetBool("isDead", false);
@@ -70,6 +74,7 @@ public class BlueCar : MonoBehaviour
 
     IEnumerator AtackIE()
     {
+        _crashAudio.Play();
         stop = true;
         yield return new WaitForSeconds(7f);
         stop = false;
@@ -92,7 +97,8 @@ public class BlueCar : MonoBehaviour
         {
             if (!stop)
             {
-                _player.GetComponent<PlayerMovements>().plHP -= 1;
+                _playerScript.plHP -= 1;
+                _playerScript.hpText.text = _playerScript.plHP.ToString();
                 StartCoroutine(AtackIE());
             }
         }

@@ -3,7 +3,18 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Pushpin
+  - Enemy
+  - Bonus
+  - Level
+  - Wall
+  - Zone2BlueBox
+  - Zone2GreenBox
+  - Heal
+  - CannonBall
+  - Truck
+  - Object
   layers:
   - Default
   - TransparentFX

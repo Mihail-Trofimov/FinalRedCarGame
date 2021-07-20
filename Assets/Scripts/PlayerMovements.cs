@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovements : MonoBehaviour
@@ -9,8 +10,12 @@ public class PlayerMovements : MonoBehaviour
 
     [SerializeField] private WheelCollider[] whellCols;
     [SerializeField] private Transform[] whellMeshs;
+    [SerializeField] private Slider slider;
+    [SerializeField] public Text hpText;
     [SerializeField] private AudioSource _beepAudio;
-    [SerializeField] private AudioClip _beepClip;
+    [SerializeField] private AudioSource _cannonBallAudio;
+
+
 
     public int plHP = 5;
     public float nitro = 100;
@@ -46,6 +51,9 @@ public class PlayerMovements : MonoBehaviour
         flying = false;
         itsAtrap = false;
         _rb = GetComponent<Rigidbody>();
+
+        slider.value = nitro;
+        hpText.text = plHP.ToString();
     }
     void Update()
     {
@@ -83,7 +91,6 @@ public class PlayerMovements : MonoBehaviour
         whellMeshs[0].rotation = Quaternion.Euler(whellMeshs[2].rotation.eulerAngles.x, whellMeshs[2].rotation.eulerAngles.y, whellMeshs[2].rotation.eulerAngles.z - 30f * Input.GetAxis("Horizontal"));
         whellMeshs[1].rotation = Quaternion.Euler(whellMeshs[2].rotation.eulerAngles.x, whellMeshs[2].rotation.eulerAngles.y, whellMeshs[2].rotation.eulerAngles.z - 30f * Input.GetAxis("Horizontal"));
 
-
         if (isJumpPressed && !flying && !itsAtrap)
         {
             _rb.AddForce(Vector3.up * 100000f * Time.deltaTime);
@@ -96,7 +103,7 @@ public class PlayerMovements : MonoBehaviour
             {
                 _rb.AddForce(transform.forward * 10000f * Time.deltaTime * Input.GetAxis("Vertical"));
                 nitro -= 10 * Time.deltaTime;
-
+                slider.value = nitro;
             }
             isNitroPressed = false;
         }
@@ -224,6 +231,7 @@ public class PlayerMovements : MonoBehaviour
             inBonus = true;
             Destroy(other.gameObject);
             nitro += 200;
+            slider.value = nitro;
             StartCoroutine(boolBonus());
         }
         else if (other.tag == "Heal" && !inHeal)
@@ -231,6 +239,7 @@ public class PlayerMovements : MonoBehaviour
             inHeal = true;
             Destroy(other.gameObject);
             plHP++;
+            hpText.text = plHP.ToString();
             StartCoroutine(boolHeal());
         }
         else if (other.tag == "Pushpin" && !inPushpin)
@@ -250,8 +259,10 @@ public class PlayerMovements : MonoBehaviour
         if (other.tag == "CannonBall" && !inCannonBall)
         {
             inCannonBall = true;
+            _cannonBallAudio.Play();
             Destroy(other.gameObject);
             plHP--;
+            hpText.text = plHP.ToString();
             StartCoroutine(boolCannonBall());
         } 
         //if (other.tag == "Level")
