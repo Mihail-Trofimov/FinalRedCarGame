@@ -15,6 +15,7 @@ TagManager:
   - CannonBall
   - Truck
   - Object
+  - EasterCakes
   layers:
   - Default
   - TransparentFX

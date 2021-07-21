@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class CannonBallSound : MonoBehaviour
 {
+    public float _time = -1;
+
     IEnumerator Start()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitWhile(() => _time < 0);
+        StartCoroutine(StartIE());
+    }
+    IEnumerator StartIE()
+    {
+        yield return new WaitForSeconds(_time);
         Destroy(gameObject);
         Destroy(this);
     }

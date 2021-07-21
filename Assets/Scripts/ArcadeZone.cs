@@ -13,8 +13,10 @@ public class ArcadeZone : MonoBehaviour
     [SerializeField] private Transform[] PointsHeal;
     private Rigidbody _plRb;
     Stack<GameObject> _bonus;
+    public bool _end;
     void Start()
     {
+        _end = false;
         _bonus = new Stack<GameObject>();
         _plRb = Player.GetComponent<Rigidbody>();
         for (int i = 0; i < PointsBonus.Length; i++)
@@ -37,6 +39,7 @@ public class ArcadeZone : MonoBehaviour
 
     void End()
     {
+        _end = true;
         foreach (GameObject _obj in _bonus)
         {
             if (_obj != null)

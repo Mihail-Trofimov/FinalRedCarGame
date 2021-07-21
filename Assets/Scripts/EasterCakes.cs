@@ -8,7 +8,6 @@ public class EasterCakes : MonoBehaviour
     {
         if (other.tag == "CannonBall")
         {
-            Destroy(other.gameObject);
             Destroy(gameObject);
             Destroy(this);
         }
