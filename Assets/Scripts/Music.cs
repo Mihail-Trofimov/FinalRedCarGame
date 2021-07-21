@@ -27,165 +27,112 @@ public class Music : MonoBehaviour
 
     [SerializeField] private GameObject _zoneObj;
 
-    IEnumerator Start()
+    [SerializeField] private AudioSource _menuMusic;
+
+    private AudioSource _music;
+
+    void Start()
     {
-        yield return new WaitForSeconds(2f);
-        if (_zoneObj.activeSelf)
-        {
-            StartCoroutine(Zone1LoopIE());
-        }
-        else
-        {
-            if (_mound1.activeSelf)
-            {
-                StartCoroutine(SandAtackIE());
-            }
-            else if (!_mound1.activeSelf && _mound2.activeSelf)
-            {
-                StartCoroutine(Sand3LoopIE());
-            }
-            else if (!_mound2.activeSelf && _mound3.activeSelf)
-            {
-                StartCoroutine(Sand2LoopIE());
-            }
-            else if (!_mound3.activeSelf)
-            {
-                StartCoroutine(Sand1LoopIE());
-            }
-        }
+        if(_menuScript._menu) StartCoroutine(MenuMusic());
+        else if (_zoneObj.activeSelf && !_zone1Script._end) StartCoroutine(Zone1LoopIE());
+        else if (_zoneObj.activeSelf && _zone1Script._end && !_zone2Script._end) StartCoroutine(Zone2LoopIE());
+        else if (_zoneObj.activeSelf && _zone2Script._end && !_zone3Script._end) StartCoroutine(Zone3LoopIE());
+        else if (_mound1.activeSelf || _enemy._atack) StartCoroutine(SandAtackIE());
+        else if (!_mound3.activeSelf) StartCoroutine(Sand1LoopIE());
+        else if (!_mound2.activeSelf && _mound3.activeSelf) StartCoroutine(Sand2LoopIE());
+        else if (!_mound1.activeSelf && _mound2.activeSelf) StartCoroutine(Sand3LoopIE());
+    }
+    IEnumerator MenuMusic()
+    {
+        _music = _menuMusic;
+        FadeIn();
+        yield return new WaitWhile(() => _menuScript._menu);
+        FadeOut();
+        Start();
     }
     IEnumerator Zone1LoopIE()
     {
-        yield return new WaitWhile(() => _menuScript._menu);
-        FadeInIE(_zonePart1);
+        _music = _zonePart1;
+        FadeIn();
         yield return new WaitWhile(() => !_zone1Script._end && !_menuScript._menu);
-        if (_menuScript._menu)
-        {
-            FadeOutIE(_zonePart1);
-            StartCoroutine(Zone1LoopIE());
-            yield break;
-        }
-        FadeOutIE(_zonePart1);
-        StartCoroutine(Zone2LoopIE());
+        FadeOut();
+        Start();
     }
     IEnumerator Zone2LoopIE()
     {
-        yield return new WaitWhile(() => _menuScript._menu);
-        FadeInIE(_zonePart2);
+        _music = _zonePart2;
+        FadeIn();
         yield return new WaitWhile(() => !_zone2Script._end && !_menuScript._menu);
-        if (_menuScript._menu)
-        {
-            FadeOutIE(_zonePart2);
-            StartCoroutine(Zone2LoopIE());
-            yield break;
-        }
-        FadeOutIE(_zonePart2);
-        StartCoroutine(Zone3LoopIE());
+        FadeOut();
+        Start();
     }
     IEnumerator Zone3LoopIE()
     {
-        yield return new WaitWhile(() => _menuScript._menu);
-        FadeInIE(_zonePart3);
+        _music = _zonePart3;
+        FadeIn();
         yield return new WaitWhile(() => !_zone3Script._end && !_menuScript._menu);
-        if (_menuScript._menu)
-        {
-            FadeOutIE(_zonePart3);
-            StartCoroutine(Zone3LoopIE());
-            yield break;
-        }
-        FadeOutIE(_zonePart3);
-        StartCoroutine(Start());
+        FadeOut();
+        Start();
     }
+
+
     IEnumerator SandAtackIE()
     {
-        yield return new WaitWhile(() => _menuScript._menu);
-        if (_enemy._atack || _mound1.activeSelf)
-        {
-            FadeInIE(_sandEnemy);
-            if (_enemy._atack)
-            {
-                yield return new WaitWhile(() => _enemy._atack && !_menuScript._menu && !_zoneObj.activeSelf);
-                if(_menuScript._menu)
-                {
-                    FadeOutIE(_sandEnemy);
-                    StartCoroutine(SandAtackIE());
-                    yield break;
-                }
-            }
-            else
-            {
-                yield return new WaitWhile(() => !_zoneObj.activeSelf && !_menuScript._menu);
-                if (_menuScript._menu)
-                {
-                    FadeOutIE(_sandEnemy);
-                    StartCoroutine(SandAtackIE());
-                    yield break;
-                }
-            }
-        }
-        FadeOutIE(_sandEnemy);
-        StartCoroutine(Start());
+        _music = _sandEnemy;
+        FadeIn();
+        if (_enemy._atack) yield return new WaitWhile(() => _enemy._atack && !_menuScript._menu && !_zoneObj.activeSelf);
+        else yield return new WaitWhile(() => !_zoneObj.activeSelf && !_menuScript._menu);
+        FadeOut();
+        Start();
     }
     IEnumerator Sand3LoopIE()
     {
-        yield return new WaitWhile(() => _menuScript._menu);
-        FadeInIE(_sandPart2);
-        yield return new WaitWhile(() => !_menuScript._menu && !_zoneObj.activeSelf && !_mound1.activeSelf);
-        if (_menuScript._menu)
-        {
-            FadeOutIE(_sandPart3);
-            StartCoroutine(Zone3LoopIE());
-            yield break;
-        }
-        FadeOutIE(_sandPart3);
-        StartCoroutine(Start());
+        _music = _sandPart3;
+        FadeIn();
+        yield return new WaitWhile(() => !_menuScript._menu && !_zoneObj.activeSelf && !_mound1.activeSelf && !_enemy._atack);
+        FadeOut();
+        Start();
     }
     IEnumerator Sand2LoopIE()
     {
-        yield return new WaitWhile(() => _menuScript._menu);
-        FadeInIE(_sandPart2);
-        yield return new WaitWhile(() => !_menuScript._menu && !_zoneObj.activeSelf && !_mound2.activeSelf);
-        if (_menuScript._menu)
-        {
-            FadeOutIE(_sandPart2);
-            StartCoroutine(Zone2LoopIE());
-            yield break;
-        }
-        FadeOutIE(_sandPart2);
-        StartCoroutine(Start());
+        _music = _sandPart2;
+        FadeIn();
+        yield return new WaitWhile(() => !_menuScript._menu && !_zoneObj.activeSelf && !_mound2.activeSelf && !_enemy._atack);
+        FadeOut();
+        Start();
     }
     IEnumerator Sand1LoopIE()
     {
-        yield return new WaitWhile(() => _menuScript._menu);
-        FadeInIE(_sandPart1);
-        yield return new WaitWhile(() => !_menuScript._menu && !_zoneObj.activeSelf && !_mound3.activeSelf);
-        if (_menuScript._menu)
-        {
-            FadeOutIE(_sandPart1);
-            StartCoroutine(Zone1LoopIE());
-            yield break;
-        }
-        FadeOutIE(_sandPart1);
-        StartCoroutine(Start());
+        _music = _sandPart1;
+        FadeIn();
+        yield return new WaitWhile(() => !_menuScript._menu && !_zoneObj.activeSelf && !_mound3.activeSelf && !_enemy._atack);
+        FadeOut();
+        Start();
     }
 
-
-    IEnumerator FadeInIE(AudioSource _music)
+    void FadeOut()
     {
-        while (_music.volume < 1)
-        {
-            _music.volume += 1f * Time.deltaTime;
-            yield return new WaitForFixedUpdate();
-        }
-        _sandPart1.Play();
+        FadeP();
+        MusicFadeOut _fade = _music.gameObject.AddComponent<MusicFadeOut>();
+        _fade._music = _music;
     }
-    IEnumerator FadeOutIE(AudioSource _music)
+    void FadeP()
     {
-        while (_music.volume > 0)
+        if (!_music.gameObject.GetComponent<MusicFadeIn>())
         {
-            _music.volume -= 1f * Time.deltaTime;
-            yield return new WaitForFixedUpdate();
+            MusicFadeIn _x = _music.gameObject.GetComponent<MusicFadeIn>();
+            Destroy(_x);
         }
-        _sandPart1.Pause();
+        if (!_music.gameObject.GetComponent<MusicFadeOut>())
+        {
+            MusicFadeOut _x = _music.gameObject.GetComponent<MusicFadeOut>();
+            Destroy(_x);
+        }
+    }
+    void FadeIn()
+    {
+        FadeP();
+        MusicFadeIn _fade = _music.gameObject.AddComponent<MusicFadeIn>();
+        _fade._music = _music;
     }
 }

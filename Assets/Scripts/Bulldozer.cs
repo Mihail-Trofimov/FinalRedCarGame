@@ -89,7 +89,7 @@ public class Bulldozer : MonoBehaviour
 
     IEnumerator Heap()
     {
-        Debug.Log("Work Heap");
+        //Debug.Log("Work Heap");
         while (_heap.transform.localScale.z > 0 || _heap.transform.localScale.y > 0 || _heap.transform.localScale.x > 0)
         {
             if (_heap.transform.localScale.x > 0)
