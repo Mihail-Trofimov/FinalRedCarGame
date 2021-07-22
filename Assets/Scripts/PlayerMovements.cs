@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovements : MonoBehaviour
@@ -56,6 +57,10 @@ public class PlayerMovements : MonoBehaviour
     }
     void Update()
     {
+        if (plHP < 1)
+        {
+            SceneManager.LoadScene(2);
+        }
         if (!_menuScript._menu)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -146,7 +151,7 @@ public class PlayerMovements : MonoBehaviour
             _time += 1;
             yield return new WaitForSeconds(0.01f);
         }
-        if (_time < 40 || _time > 150)
+        if (_time < 30 || _time > 150)
         {
             _beep = false;
             yield break;
@@ -168,7 +173,7 @@ public class PlayerMovements : MonoBehaviour
             _time += 1;
             yield return new WaitForSeconds(0.01f);
         }
-        if (_time < 40 || _time > 150)
+        if (_time < 30 || _time > 150)
         {
             _beep = false;
             yield break;
