@@ -12,6 +12,8 @@ public class Cannon : MonoBehaviour
 
     [SerializeField] private GameObject _prefab;
     [SerializeField] private Transform _shotPoint;
+    [SerializeField] private ParticleSystem _smoke;
+
     private float speedT;
     private float disT;
     private float agleT;
@@ -66,6 +68,7 @@ public class Cannon : MonoBehaviour
                 GameObject _newBall = Instantiate(_prefab, _shotPoint.position, Quaternion.Euler(_shotPoint.rotation.eulerAngles.x, agleT, _shotPoint.rotation.eulerAngles.z));
                 _newBall.GetComponent<Rigidbody>().AddForce(transform.forward * speedT);
                 _audioShot.Play();
+                _smoke.gameObject.SetActive(true);
             }
             yield return new WaitForSeconds(5.0f);
         }

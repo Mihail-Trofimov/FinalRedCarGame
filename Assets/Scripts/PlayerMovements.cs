@@ -15,6 +15,9 @@ public class PlayerMovements : MonoBehaviour
     [SerializeField] public Text hpText;
     [SerializeField] private AudioSource _beepAudio;
     [SerializeField] private AudioSource _cannonBallAudio;
+    [SerializeField] private AudioSource _nitroAudio;
+    [SerializeField] private AudioSource _jumpAudio;
+    [SerializeField] private AudioSource _motorAudio;
     [SerializeField] private GameMenu _menuScript;
 
     public int plHP = 5;
@@ -72,6 +75,11 @@ public class PlayerMovements : MonoBehaviour
             {
                 isNitroPressed = true;
             }
+            else
+            {
+                _nitroAudio.Stop();
+                isNitroPressed = false;
+            }
             if (Input.GetMouseButtonDown(0))
             {
                 beepDown = true;
@@ -108,6 +116,7 @@ public class PlayerMovements : MonoBehaviour
 
             if (isJumpPressed && !flying && !itsAtrap)
             {
+                _jumpAudio.Play();
                 _rb.AddForce(Vector3.up * 200000f * Time.deltaTime);
                 _rb.MoveRotation(Quaternion.Euler(_rb.rotation.eulerAngles.x, _rb.rotation.eulerAngles.y, 0));
                 isJumpPressed = false;
@@ -116,24 +125,33 @@ public class PlayerMovements : MonoBehaviour
             {
                 if (nitro > 0)
                 {
+                    if (!_nitroAudio.isPlaying)
+                    {
+                        _nitroAudio.Play();
+                    }
                     _rb.AddForce(transform.forward * 10000f * Time.deltaTime * Input.GetAxis("Vertical"));
                     nitro -= 20 * Time.deltaTime;
                     slider.value = nitro;
                 }
-                isNitroPressed = false;
             }
             if (Input.GetAxis("Vertical") > 0 && !itsAtrap || Input.GetAxis("Vertical") < 0 && !itsAtrap && !flying)
             {
+                if (!_motorAudio.isPlaying)
+                { 
+                    _motorAudio.Play(); 
+                }
+                _motorAudio.pitch = 0.3f + Math.Abs(Input.GetAxis("Vertical"));
+                isStops = false;
+                _rb.AddForce(transform.forward * 5000f * Time.deltaTime * Input.GetAxis("Vertical"));
                 for (int i = 0; i < whellCols.Length; i++)
                 {
-                    isStops = false;
                     whellCols[i].brakeTorque = 0;
                     whellCols[i].motorTorque = 50f * Input.GetAxis("Vertical") * Time.deltaTime;
-                    _rb.AddForce(transform.forward * 1000f * Time.deltaTime * Input.GetAxis("Vertical"));
                 }
             }
             else
             {
+                _motorAudio.Stop();
                 isStops = true;
                 for (int i = 0; i < whellCols.Length; i++)
                 {

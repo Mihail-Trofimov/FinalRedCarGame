@@ -58,6 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fa0673b46e71554fa5d77fdda4fa32c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _trupAudio: {fileID: 5694780790317084964, guid: 64572c6a7dd01f4488b66b7f5292818f, type: 3}
 --- !u!1 &2943957781630090311
 GameObject:
   m_ObjectHideFlags: 0

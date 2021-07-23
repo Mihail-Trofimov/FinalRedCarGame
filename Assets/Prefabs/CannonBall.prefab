@@ -131,6 +131,8 @@ MonoBehaviour:
   _audioClipSand: {fileID: 8300000, guid: d69de4f3195b0884f8f24bfd6a32467e, type: 3}
   _audioClipObject: {fileID: 8300000, guid: d6b9eddb4489a16468f64e975712e569, type: 3}
   _audioClipEasterCakes: {fileID: 8300000, guid: bb6e24006456e7443a350efcf8e7f292, type: 3}
+  _effDestroy: {fileID: 3931840839163112941, guid: b161fb2fb6f6991459509bae0c095e2c, type: 3}
+  _effSand: {fileID: 7108562827104678560, guid: d63f8df379b7ebe43b93a8ec64781763, type: 3}
 --- !u!135 &1982950334402229447
 SphereCollider:
   m_ObjectHideFlags: 0

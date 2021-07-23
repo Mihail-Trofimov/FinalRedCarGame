@@ -433,6 +433,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ce57014601715c4bafbb66a5da8884a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _effDestroy: {fileID: 8011152241807728324, guid: 2703b8e44d3fa1448b7f358e295d0129, type: 3}
+  _effTake: {fileID: 4994245931277381529, guid: 6e1ddf214ac20104f90f177a414f38e6, type: 3}
+  _soundTake: {fileID: 5694780790317084964, guid: 2821c3d6b36908440bf5200d551054fc, type: 3}
+  _soundDestroy: {fileID: 736427251759054420, guid: 51dbd2ec458c0b048b5bd028db8cdb72, type: 3}
 --- !u!54 &8709207369059588832
 Rigidbody:
   m_ObjectHideFlags: 0

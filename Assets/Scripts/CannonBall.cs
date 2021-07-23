@@ -9,6 +9,8 @@ public class CannonBall : MonoBehaviour
     [SerializeField] private AudioClip _audioClipSand;
     [SerializeField] private AudioClip _audioClipObject;
     [SerializeField] private AudioClip _audioClipEasterCakes;
+    [SerializeField] private GameObject _effDestroy;
+    [SerializeField] private GameObject _effSand;
 
     void OnTriggerEnter(Collider other)
     {
@@ -21,6 +23,9 @@ public class CannonBall : MonoBehaviour
             if (other.tag == "Level")
             {
                 _sandAudio.clip = _audioClipSand;
+                
+                Instantiate(_effSand, transform.position, Quaternion.Euler(-90f, 0f, 0f));
+
             }
             else if (other.tag == "Object" || other.tag == "Enemy" || other.tag == "Truck" || other.tag == "Wall")
             {
@@ -39,8 +44,13 @@ public class CannonBall : MonoBehaviour
             CannonBallSound _tDel = _obj.AddComponent<CannonBallSound>();
             _sandAudio.Play();
             _tDel._time = _sandAudio.clip.length;
+            Instantiate(_effDestroy, transform.position, transform.rotation);
             Destroy(gameObject);
             Destroy(this);
+        }
+        else if (other.tag == "Player")
+        {
+            Instantiate(_effDestroy, transform.position, transform.rotation);
         }
     }
 }

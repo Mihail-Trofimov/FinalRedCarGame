@@ -4,6 +4,22 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class GameOver : MonoBehaviour
 {
+    [SerializeField] private AudioSource _music;
+    [SerializeField] private AudioSource _sound;
+    [SerializeField] private float _timeWait = 0.15f;
+    [SerializeField] private float _timeMinus = 0.15f;
+    private void Start()
+    {
+        Cursor.visible = true;
+        StartCoroutine(AudioIE());
+    }
+    IEnumerator AudioIE()
+    {
+        yield return new WaitForSeconds(_timeWait);
+        _sound.Play();
+        yield return new WaitForSeconds(_sound.clip.length - _timeMinus);
+        _music.Play();
+    }
     public void OnMainMenu()
     {
         StartCoroutine(Menu());
