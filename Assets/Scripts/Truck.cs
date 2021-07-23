@@ -100,7 +100,6 @@ public class Truck : MonoBehaviour
     {
         if (other.tag == "CannonBall")
         {
-            Destroy(other.gameObject);
             if (!_heap.activeSelf)
             {
                 if (_notch1.activeSelf || _notch2.activeSelf || _notch3.activeSelf)

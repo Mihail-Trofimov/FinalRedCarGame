@@ -85,6 +85,7 @@ m_PackageAssets:
         - 2.8.0-exp.1
         - 2.8.0-exp.2
         - 2.8.0-pre.1
+        - 2.8.0
         compatible:
         - 2.5.0
         - 2.6.0-preview.2
@@ -107,6 +108,7 @@ m_PackageAssets:
         - 2.8.0-exp.1
         - 2.8.0-exp.2
         - 2.8.0-pre.1
+        - 2.8.0
         verified: 2.6.5
       dependencies: []
       resolvedDependencies: []

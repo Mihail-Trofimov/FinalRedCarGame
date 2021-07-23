@@ -20,8 +20,10 @@ public class BlueCar : MonoBehaviour
     private float _speed;
     private Animator animator;
 
+    public bool _atack;
     void Start()
     {
+        _atack = false;
         _playerScript = _player.GetComponent<PlayerMovements>();
         animator = GetComponent<Animator>();
         animator.SetBool("isAttack", false);
@@ -44,6 +46,7 @@ public class BlueCar : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, _player.transform.position) >= 30f && !stop)
         {
+            _atack = false;
             animator.SetBool("isAttack", false);
             animator.SetBool("isDead", false);
             _enemy.speed = _speed;
@@ -59,6 +62,7 @@ public class BlueCar : MonoBehaviour
         }
         else if(Vector3.Distance(transform.position, _player.transform.position) < 30f && !stop)
         {
+            _atack = true;
             animator.SetBool("isAttack", true);
             animator.SetBool("isDead", false);
             _enemy.speed = _speed + 30f / Vector3.Distance(transform.position, _player.transform.position);
@@ -114,7 +118,6 @@ public class BlueCar : MonoBehaviour
         }
         else if (other.tag == "CannonBall")
         {
-            Destroy(other.gameObject);
             StartCoroutine(Trap());
         }
     }

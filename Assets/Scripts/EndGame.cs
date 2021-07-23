@@ -1,19 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EndGame : MonoBehaviour
 {
-    void Start()
-    {
-        gameObject.SetActive(false);
-    }
-
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" || other.tag == "Enemy")
+        if (other.tag == "Player")
         {
-            Debug.Log("GAME OVER");
+            SceneManager.LoadScene(3);
             Destroy(gameObject);
             Destroy(this);
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovements : MonoBehaviour
@@ -14,8 +15,10 @@ public class PlayerMovements : MonoBehaviour
     [SerializeField] public Text hpText;
     [SerializeField] private AudioSource _beepAudio;
     [SerializeField] private AudioSource _cannonBallAudio;
-
-
+    [SerializeField] private AudioSource _nitroAudio;
+    [SerializeField] private AudioSource _jumpAudio;
+    [SerializeField] private AudioSource _motorAudio;
+    [SerializeField] private GameMenu _menuScript;
 
     public int plHP = 5;
     public float nitro = 100;
@@ -57,78 +60,108 @@ public class PlayerMovements : MonoBehaviour
     }
     void Update()
     {
-
-        if (Input.GetAxis("Jump") > 0)
+        if (plHP < 1)
         {
-            isJumpPressed = true;
+            SceneManager.LoadScene(2);
         }
-        if (Input.GetAxis("Fire3") > 0)
+        if (!_menuScript._menu)
         {
-            isNitroPressed = true;
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            beepDown = true;
-            _beepAudio.Play();
-            if (!_beep)
+            if (Input.GetKeyDown(KeyCode.Space))
+            //if (Input.GetAxis("Jump") > 0)
             {
-                StartCoroutine(BeepBeep());
+                isJumpPressed = true;
+            }
+            if (Input.GetAxis("Fire3") > 0)
+            {
+                isNitroPressed = true;
+            }
+            else
+            {
+                _nitroAudio.Stop();
+                isNitroPressed = false;
+            }
+            if (Input.GetMouseButtonDown(0))
+            {
+                beepDown = true;
+                _beepAudio.Play();
+                if (!_beep)
+                {
+                    StartCoroutine(BeepBeep());
+                }
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                beepDown = false;
+                _beepAudio.Stop();
+
             }
         }
-        if (Input.GetMouseButtonUp(0))
+        else
         {
             beepDown = false;
             _beepAudio.Stop();
-
         }
     }
 
     void FixedUpdate()
     {
-        whellCols[0].steerAngle = 30f * Input.GetAxis("Horizontal");
-        whellCols[1].steerAngle = 30f * Input.GetAxis("Horizontal");
-
-        whellMeshs[0].rotation = Quaternion.Euler(whellMeshs[2].rotation.eulerAngles.x, whellMeshs[2].rotation.eulerAngles.y, whellMeshs[2].rotation.eulerAngles.z - 30f * Input.GetAxis("Horizontal"));
-        whellMeshs[1].rotation = Quaternion.Euler(whellMeshs[2].rotation.eulerAngles.x, whellMeshs[2].rotation.eulerAngles.y, whellMeshs[2].rotation.eulerAngles.z - 30f * Input.GetAxis("Horizontal"));
-
-        if (isJumpPressed && !flying && !itsAtrap)
+        if (!_menuScript._menu)
         {
-            _rb.AddForce(Vector3.up * 100000f * Time.deltaTime);
-            _rb.MoveRotation(Quaternion.Euler(_rb.rotation.eulerAngles.x, _rb.rotation.eulerAngles.y, 0));
-            isJumpPressed = false;
-        }
-        if (isNitroPressed && !flying && !itsAtrap && !isStops)
-        {
-            if (nitro > 0)
+            whellCols[0].steerAngle = 30f * Input.GetAxis("Horizontal");
+            whellCols[1].steerAngle = 30f * Input.GetAxis("Horizontal");
+
+            whellMeshs[0].rotation = Quaternion.Euler(whellMeshs[2].rotation.eulerAngles.x, whellMeshs[2].rotation.eulerAngles.y, whellMeshs[2].rotation.eulerAngles.z - 30f * Input.GetAxis("Horizontal"));
+            whellMeshs[1].rotation = Quaternion.Euler(whellMeshs[2].rotation.eulerAngles.x, whellMeshs[2].rotation.eulerAngles.y, whellMeshs[2].rotation.eulerAngles.z - 30f * Input.GetAxis("Horizontal"));
+
+
+            if (isJumpPressed && !flying && !itsAtrap)
             {
-                _rb.AddForce(transform.forward * 10000f * Time.deltaTime * Input.GetAxis("Vertical"));
-                nitro -= 10 * Time.deltaTime;
-                slider.value = nitro;
+                _jumpAudio.Play();
+                _rb.AddForce(Vector3.up * 200000f * Time.deltaTime);
+                _rb.MoveRotation(Quaternion.Euler(_rb.rotation.eulerAngles.x, _rb.rotation.eulerAngles.y, 0));
+                isJumpPressed = false;
             }
-            isNitroPressed = false;
-        }
-        if (Input.GetAxis("Vertical") > 0 && !itsAtrap || Input.GetAxis("Vertical") < 0 && !itsAtrap && !flying)
-        {
-            for (int i = 0; i < whellCols.Length; i++)
+            if (isNitroPressed && !flying && !itsAtrap && !isStops)
             {
+                if (nitro > 0)
+                {
+                    if (!_nitroAudio.isPlaying)
+                    {
+                        _nitroAudio.Play();
+                    }
+                    _rb.AddForce(transform.forward * 10000f * Time.deltaTime * Input.GetAxis("Vertical"));
+                    nitro -= 20 * Time.deltaTime;
+                    slider.value = nitro;
+                }
+            }
+            if (Input.GetAxis("Vertical") > 0 && !itsAtrap || Input.GetAxis("Vertical") < 0 && !itsAtrap && !flying)
+            {
+                if (!_motorAudio.isPlaying)
+                { 
+                    _motorAudio.Play(); 
+                }
+                _motorAudio.pitch = 0.3f + Math.Abs(Input.GetAxis("Vertical"));
                 isStops = false;
-                whellCols[i].brakeTorque = 0;
-                whellCols[i].motorTorque = 50f * Input.GetAxis("Vertical") * Time.deltaTime;
-                _rb.AddForce(transform.forward * 1000f * Time.deltaTime * Input.GetAxis("Vertical"));
+                _rb.AddForce(transform.forward * 5000f * Time.deltaTime * Input.GetAxis("Vertical"));
+                for (int i = 0; i < whellCols.Length; i++)
+                {
+                    whellCols[i].brakeTorque = 0;
+                    whellCols[i].motorTorque = 50f * Input.GetAxis("Vertical") * Time.deltaTime;
+                }
             }
-        }
-        else
-        {
-            isStops = true;
-            for (int i = 0; i < whellCols.Length; i++)
+            else
             {
-                whellCols[i].brakeTorque = Mathf.Abs(whellCols[i].motorTorque) * 1000f;
+                _motorAudio.Stop();
+                isStops = true;
+                for (int i = 0; i < whellCols.Length; i++)
+                {
+                    whellCols[i].brakeTorque = Mathf.Abs(whellCols[i].motorTorque) * 1000f;
+                }
             }
         }
     }
     IEnumerator BeepBeep()
     {
-        Debug.Log("beepBeep начинается");
         _beep = true;
         int _time = 0;
         while (beepDown && _time <= 150)
@@ -136,13 +169,11 @@ public class PlayerMovements : MonoBehaviour
             _time += 1;
             yield return new WaitForSeconds(0.01f);
         }
-        if (_time < 40 || _time > 150)
+        if (_time < 30 || _time > 150)
         {
-            Debug.Log("beepBeep time break 1: " + _time);
             _beep = false;
             yield break;
         }
-        Debug.Log("beepBeep продолжается 1");
         _time = 0;
         while (!beepDown && _time <= 60)
         {
@@ -151,30 +182,25 @@ public class PlayerMovements : MonoBehaviour
         }
         if (_time < 5 || _time > 60)
         {
-            Debug.Log("beepBeep time break 2: " + _time);
             _beep = false;
             yield break;
         }
-        Debug.Log("beepBeep продолжается 2");
         _time = 0;
         while (beepDown && _time <= 150)
         {
             _time += 1;
             yield return new WaitForSeconds(0.01f);
         }
-        if (_time < 40 || _time > 150)
+        if (_time < 30 || _time > 150)
         {
-            Debug.Log("beepBeep time break 3: " + _time);
             _beep = false;
             yield break;
         }
         beepBeep = true;
-        Debug.Log("beepBeep успешно");
         yield return new WaitForSeconds(1f);
         if (beepBeep)
         {
             beepBeep = false;
-            Debug.Log("beepBeep 2: " + beepBeep);
         }
         _beep = false;
     }
@@ -265,11 +291,6 @@ public class PlayerMovements : MonoBehaviour
             hpText.text = plHP.ToString();
             StartCoroutine(boolCannonBall());
         } 
-        //if (other.tag == "Level")
-        //{
-        //    //Debug.Log("Player NOT flying");
-        //    flying = false;
-        //}
     }
     void OnTriggerStay(Collider other)
     {
@@ -282,7 +303,6 @@ public class PlayerMovements : MonoBehaviour
     {
         if (other.tag == "Level")
         {
-            //Debug.Log("Player flying");
             flying = true;
         }
     }

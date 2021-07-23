@@ -44,11 +44,9 @@ public class Bulldozer : MonoBehaviour
         while (this != null && !_done)
         {
             yield return new WaitUntil(() => playerScript.beepBeep && _playerIn && _heap.activeSelf && !truckScript.isUnloading || _done);
-            Debug.Log("Work начало");
             if (!_done)
             {
                 playerScript.beepBeep = false;
-                Debug.Log("Work BeepBeep");
                 StartCoroutine(Embankment());
                 _currentWp = -1;
                 bool _flag = false;
@@ -67,7 +65,6 @@ public class Bulldozer : MonoBehaviour
                 }
             }
         }
-        Debug.Log("Work конец");
         _endGame.SetActive(true);
     }
 
@@ -78,24 +75,21 @@ public class Bulldozer : MonoBehaviour
         if (!_mound1.activeSelf && !_mound2.activeSelf && !_mound3.activeSelf)
         {
             StartCoroutine(Mound(_mound3));
-            Debug.Log("Work Mound 3");
         }
         else if (!_mound1.activeSelf && !_mound2.activeSelf && _mound3.activeSelf)
         {
             StartCoroutine(Mound(_mound2));
-            Debug.Log("Work Mound 2");
         }
         else if (!_mound1.activeSelf && _mound2.activeSelf && _mound3.activeSelf)
         {
             StartCoroutine(Mound(_mound1));
             _done = true;
-            Debug.Log("Work Mound 1");
         }
     }
 
     IEnumerator Heap()
     {
-        Debug.Log("Work Heap");
+        //Debug.Log("Work Heap");
         while (_heap.transform.localScale.z > 0 || _heap.transform.localScale.y > 0 || _heap.transform.localScale.x > 0)
         {
             if (_heap.transform.localScale.x > 0)

@@ -11,7 +11,8 @@ public class GameMenu : MonoBehaviour
     [SerializeField] private GameObject _panelAbout;
     [SerializeField] private GameObject _panelStatus;
 
-    private bool _menu;
+    public bool _menu;
+
     private bool _about;
     private bool _settings;
 

@@ -12,12 +12,16 @@ public class Cannon : MonoBehaviour
 
     [SerializeField] private GameObject _prefab;
     [SerializeField] private Transform _shotPoint;
+    [SerializeField] private ParticleSystem _smoke;
+
     private float speedT;
     private float disT;
     private float agleT;
-    
+
+    private AudioSource _audioShot;
     void Start()
     {
+        _audioShot = GetComponent<AudioSource>();
         isSeeYou = false;
         StartCoroutine(Shot());
     }
@@ -47,7 +51,6 @@ public class Cannon : MonoBehaviour
                 isDeadZone = true;
                 transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 
-                //Debug.Log("Dead Zone");
             }
         }
     }
@@ -64,11 +67,13 @@ public class Cannon : MonoBehaviour
                 agleT = AgleBalistic(disT, speedT);
                 GameObject _newBall = Instantiate(_prefab, _shotPoint.position, Quaternion.Euler(_shotPoint.rotation.eulerAngles.x, agleT, _shotPoint.rotation.eulerAngles.z));
                 _newBall.GetComponent<Rigidbody>().AddForce(transform.forward * speedT);
+                _audioShot.Play();
+                _smoke.gameObject.SetActive(true);
             }
             yield return new WaitForSeconds(5.0f);
         }
     }
-    public float AgleBalistic(float distance, float speedBullet)
+    float AgleBalistic(float distance, float speedBullet)
     {
         //Находим велечину гравитации
         float gravity = Physics.gravity.magnitude;
@@ -89,7 +94,6 @@ public class Cannon : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            //Debug.Log("I SEE YOU");
             isSeeYou = true;
             _player = other.transform;
         }
@@ -98,7 +102,6 @@ public class Cannon : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            //Debug.Log("I don't SEE YOU");
             isSeeYou = false;
         }
     }

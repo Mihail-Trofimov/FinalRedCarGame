@@ -161,6 +161,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cc4e7ee28433b94c94d13717fe5d7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _effDestroy: {fileID: 3931840839163112941, guid: a03b5aac288cb5148811091352bacd1c, type: 3}
+  _effTake: {fileID: 2385785125128241309, guid: a4c0745a736c4214ebd883f0b700e100, type: 3}
+  _soundTake: {fileID: 5694780790317084964, guid: fbba373e693c5ee4e889ba4349ecd718, type: 3}
+  _soundDestroy: {fileID: 736427251759054420, guid: 266752122893afd4ab5fd11c00fe60b7, type: 3}
 --- !u!54 &6169105684309812027
 Rigidbody:
   m_ObjectHideFlags: 0
